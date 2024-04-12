@@ -15,6 +15,7 @@ import { ReactRenderer } from './ReactRenderer.js'
 import { ReactNodeViewContext, ReactNodeViewContextProps } from './useReactNodeView.js'
 
 export interface ReactNodeViewRendererOptions extends NodeViewRendererOptions {
+  innerClassName: any
   update:
     | ((props: {
         oldNode: ProseMirrorNode
@@ -93,8 +94,14 @@ class ReactNodeView extends NodeView<
       // With this fix it seems to work fine
       // See: https://github.com/ueberdosis/tiptap/issues/1197
       this.contentDOMElement.style.whiteSpace = 'inherit'
+
+      // Add innerClassName to the class list if it exists
+      if (this.options.innerClassName) {
+        this.contentDOMElement.classList.add(this.options.innerClassName);
+      }
     }
 
+    
     let as = this.node.isInline ? 'span' : 'div'
 
     if (this.options.as) {
